@@ -1,0 +1,25 @@
+{
+  "name": "ssr-htmx-workflow",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:all": "esbuild index=scripts/index.js extensions=scripts/extensions.js --bundle --minify --outdir=static && npx tailwindcss -i input.css -o static/output.css",
+    "build:js": "esbuild index=scripts/index.js extensions=scripts/extensions.js --bundle --outdir=static",
+    "tailwind:watch": "npx tailwindcss -i input.css -o static/output.css --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "htmx.org": "^1.9.3",
+    "hyperscript.org": "^0.9.9",
+    "idiomorph": "^0.0.8"
+  },
+  "devDependencies": {
+    "esbuild": "^0.18.11",
+    "jsdoc": "^4.0.2",
+    "tailwindcss": "^3.3.2"
+  }
+}

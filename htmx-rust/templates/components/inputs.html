@@ -1,0 +1,31 @@
+{% macro input(label, name, type="text", value="", read_only=false) %}
+<div class="flex content-center justify-between gap-1 {% if read_only %}pointer-events-none{% endif %}">
+  <label for="name" class="basis-1/4 font-semibold">{{ label }}</label>
+  <input
+    class="basis-3/4 p-1 border-solid border rounded-md border-black dark:border-white dark:bg-slate-800 dark:hover:bg-slate-900 dark:focus:bg-slate-900 dark:read-only:bg-inherit dark:read-only:border-transparent"
+    id="{{ name }}"
+    name="{{ name }}"
+    type="text"
+    autocomplete="off"
+    value="{{ value }}"
+    {% if read_only %} readonly {% endif %}
+  />
+</div>
+{% endmacro input %}
+
+<!--  -->
+
+{% macro textarea(label, name, value="", read_only=false) %}
+<div class="flex content-center justify-between gap-1 {% if read_only %}pointer-events-none{% endif %}">
+  <label for="description" class="basis-1/4 font-semibold">{{ label }}</label>
+  <textarea
+    id="{{ name }}"
+    name="{{ name }}"
+    class="basis-3/4 resize-none p-1 border-solid border rounded-md border-black dark:border-white dark:bg-slate-800 dark:hover:bg-slate-900 dark:focus:bg-slate-900 dark:read-only:bg-inherit dark:read-only:border-transparent"
+    rows="4"
+    {% if read_only %}readonly{% endif %}
+  >{{ value }}</textarea>
+</div>
+{% endmacro textarea %}
+
+

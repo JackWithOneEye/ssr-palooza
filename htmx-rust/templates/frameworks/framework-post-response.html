@@ -1,0 +1,7 @@
+{% import "frameworks/frameworks-macros.html" as fms %}
+
+<div hx-swap-oob="afterbegin:#frameworks-list">
+  {{ fms::list_item(framework=framework) }}
+</div>
+
+{% include "frameworks/framework-detail.html" %}

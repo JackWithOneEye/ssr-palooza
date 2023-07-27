@@ -1,0 +1,24 @@
+<dialog
+  id="confirm-modal"
+  class="p-0 bg-transparent dark:text-white"
+  _="on click(target) if target is really me call me.close('cancel')"
+>
+  <form class="card bg-slate-700 flex flex-col p-4 w-80">
+    <p class="flex-1 mb-4">You sure?</p>
+    <div class="flex justify-end">
+      <button class="btn-secondary mr-4" value="cancel" formmethod="dialog">
+        Cancel
+      </button>
+      <button class="btn-primary" value="confirm" formmethod="dialog">
+        Confirm
+      </button>
+    </div>
+  </form>
+</dialog>
+<script type="text/hyperscript">
+  def openConfirmModal()
+    call #confirm-modal.showModal()
+    wait for close from #confirm-modal
+    return #confirm-modal.returnValue
+  end
+</script>

@@ -1,0 +1,75 @@
+<div
+  id="menu-backdrop"
+  class="bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0"
+  style="display: none"
+  _="on click call closeSideMenu()"
+></div>
+<div
+  id="menu"
+  class="fixed flex flex-col inset-0 w-64 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800"
+  tabindex="-1"
+  hx-target="#root-router"
+  hx-swap="innerHTML"
+>
+  <div class="flex items-center pt-2 pb-4 pl-1">
+    <button
+      class="flex items-center justify-center p-2 mr-4 h-8 w-8 hover:bg-gray-700"
+      _="on click halt the event then call closeSideMenu()"
+    >
+      <span class="font-mono">x</span>
+    </button>
+    <span>Menu</span>
+  </div>
+  <ul class="list-none list-inside flex-1">
+    <li
+      class="border-l-4 border-transparent data-[active]:border-sky-500 hover:dark:bg-gray-700"
+      _="on workflowOnInit[key === 'frameworks'] from body add [@data-active] to me end
+      on workflowOnDestroy[key === 'frameworks'] from body remove [@data-active] from me end"
+    >
+      <span
+        class="block cursor-pointer ml-1 w-full"
+        hx-get="/frameworks"
+        hx-push-url="true"
+        >Frameworks</span
+      >
+    </li>
+    <li
+      class="border-l-4 border-transparent data-[active]:border-sky-500 hover:dark:bg-gray-700"
+    >
+      <span
+        class="block cursor-pointer ml-1 w-full"
+        hx-get="/movies"
+        hx-push-url="true"
+        >Movies</span
+      >
+    </li>
+    <li
+      class="border-l-4 border-transparent data-[active]:border-sky-500 hover:dark:bg-gray-700"
+    >
+      <span
+        class="block cursor-pointer ml-1 w-full"
+        hx-get="/people"
+        hx-push-url="true"
+        >People</span
+      >
+    </li>
+  </ul>
+</div>
+
+
+<script type="text/hyperscript">
+  init
+    set $menuEl to #menu
+    set $backdropEl to #menu-backdrop
+  end
+  def openSideMenu()
+    add .transform-none to $menuEl
+    remove .-translate-x-full from $menuEl
+    show $backdropEl
+  end
+  def closeSideMenu()
+    remove .transform-none from $menuEl
+    add .-translate-x-full to $menuEl
+    hide $backdropEl
+  end
+</script>

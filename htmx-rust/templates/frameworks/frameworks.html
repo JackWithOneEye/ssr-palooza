@@ -1,0 +1,95 @@
+{% import "dashboard.html" as dashboard %}
+{% import "frameworks/frameworks-macros.html" as fms %}
+<!--  -->
+{% macro breadcrumb() %}
+<span
+  id="breadcrumb-frameworks"
+  class="cursor-pointer"
+  hx-get="/frameworks"
+  hx-push-url="true"
+  hx-target="#root-router"
+  hx-swap="innerHTML"
+  data-breadcrumb-key="frameworks"
+  >Frameworks</span
+>
+{% endmacro breadcrumb %}
+
+<div hx-swap-oob="innerHTML:#breadcrumbs">
+  {{ dashboard::breadcrumb() }}
+  <span>></span>
+  {{ self::breadcrumb() }}
+</div>
+
+<div
+  is="on-lifecycle-event"
+  id="frameworks"
+  class="card max-w-screen-md flex-1 flex flex-col"
+  data-panel-depth="0"
+  _="on init send workflowOnInit(key:'frameworks') to body end
+    on destroy send workflowOnDestroy(key:'frameworks') to body end"
+>
+  <div class="flex items-center gap-4 p-4">
+    <h5 class="panel-header">Frameworks</h5>
+    <div class="flex-1 flex justify-end">
+      <button
+        class="btn-primary"
+        hx-get="/frameworks/new"
+        hx-target="#frameworks-router"
+        hx-swap="innerHTML"
+      >
+        ADD
+      </button>
+    </div>
+  </div>
+  <div class="flex flex-col flex-auto overflow-auto">
+    <div class="flex flex-col h-full">
+      <div
+        id="frameworks-list"
+        class="static flex-1 overflow-auto border-t border-b border-solid dark:border-slate-50"
+        _="init set :selectedListItemElt to null end
+          on workflowOnInit(id)[key === 'framework-detail'] from body or workflowOnInit(id)[key === 'framework-edit'] from body
+            set :selectedListItemElt to #{'framework-list-item-' + id}
+            add [@data-selected=true] to :selectedListItemElt
+          end
+          on workflowOnDestroy(id)[key === 'framework-detail'] from body or workflowOnDestroy(id)[key === 'framework-edit'] from body
+            remove [@data-selected] from :selectedListItemElt unless :selectedListItemElt is null
+            set :selectedListItemElt to null
+          end
+        "
+      >
+        {% for framework in frameworks %}
+        <!--  -->
+        {{ fms::list_item(framework=framework) }}
+        <!--  -->
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="p-4">
+    <span>{{ frameworks | length }} loaded Frameworks</span>
+  </div>
+</div>
+
+<div
+  id="frameworks-router"
+  class="contents"
+  _="init set :currentPath to '/frameworks' end
+    on navigate(path, silent)
+      if path is really :currentPath
+        exit
+      end
+      if path is really '/frameworks'
+        remove children of me
+        then repeat for ch in Array.from(#breadcrumbs.children).reverse()
+          if ch[@data-breadcrumb-key] is really 'frameworks'
+            break
+          end
+          then remove ch
+        end
+      else
+        call htmx.ajax('GET', path, {source: me, target: me, swap: 'innerHTML'}) unless silent
+      end
+      set :currentPath to path
+    end
+  "
+></div>

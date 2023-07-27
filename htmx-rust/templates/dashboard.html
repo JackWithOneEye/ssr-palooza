@@ -1,0 +1,32 @@
+{% macro breadcrumb() %}
+<span
+  id="breadcrumb-dashboard"
+  class="cursor-pointer"
+  hx-get="/dashboard"
+  hx-push-url="true"
+  hx-target="#root-router"
+  hx-swap="innerHTML"
+  >Dashboard</span
+>
+{% endmacro breadcrumb %}
+
+<div hx-swap-oob="innerHTML:#breadcrumbs">
+  {{ self::breadcrumb() }}
+</div>
+
+<div id="dashboard" class="flex items-center justify-center w-full">
+  <ul class="list-disc list-inside">
+    <li
+      class="border-l-4 border-transparent data-[active]:border-sky-500 hover:dark:bg-gray-700"
+    >
+      <span
+        class="cursor-pointer ml-1"
+        hx-get="/frameworks"
+        hx-push-url="true"
+        hx-target="#root-router"
+        hx-swap="innerHTML"
+        >Frameworks</span
+      >
+    </li>
+  </ul>
+</div>

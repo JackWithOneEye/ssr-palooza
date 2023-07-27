@@ -1,0 +1,16 @@
+[package]
+name = "ssr-htmx-workflow"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.72"
+axum = { version = "0.6.18", features = ["macros"] }
+futures = "0.3.28"
+serde = { version = "1.0.169", features = ["serde_derive"] }
+tera = "1.19.0"
+tokio = { version = "1.29.1", features = ["full"] }
+tower-http = { version = "0.4.1", features = ["fs", "trace"] }
+uuid = { version = "1.4.0", features = ["serde", "v4"] }

@@ -1,0 +1,72 @@
+{% import "dashboard.html" as dashboard %} 
+{% import "frameworks/frameworks.html" as frameworks %}
+
+<div hx-swap-oob="innerHTML:#breadcrumbs">
+  {{ dashboard::breadcrumb() }}
+  <span>></span>
+  {{ frameworks::breadcrumb() }}
+  <span data-breadcrumb-key="framework-new">></span>
+  <span data-breadcrumb-key="framework-new">New Framework</span>
+</div>
+
+<div
+  is="on-lifecycle-event"
+  id="framework-new"
+  class="card max-w-screen-md flex-1 flex flex-col"
+  data-panel-depth="0"
+  hx-target="this"
+  hx-swap="outerHTML"
+  _="on init send workflowOnInit(key:'framework-new') to body end
+    on destroy send workflowOnDestroy(key:'framework-new') to body end"
+>
+  <div class="flex items-center gap-4 p-4">
+    <h5 class="panel-header">New Framework</h5>
+  </div>
+  <div class="flex flex-col flex-auto overflow-auto">
+    <form
+      class="flex flex-col h-full"
+      hx-post="/frameworks/new"
+      hx-ext="checkbox-enc"
+    >
+      <div class="flex flex-col flex-1 gap-6 px-4 overflow-auto">
+        <div class="flex flex-col justify-between gap-2">
+          <label for="name" class="font-semibold">Name</label>
+          <input
+            class="p-1 outline-none border-solid border rounded-md border-black dark:border-white dark:bg-slate-800 dark:hover:bg-slate-700 dark:focus:bg-slate-700"
+            id="name"
+            name="name"
+            type="text"
+            autocomplete="off"
+          />
+        </div>
+        <div class="flex flex-col justify-between gap-2">
+          <label for="description" class="font-semibold">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            class="resize-none p-1 outline-none border-solid border rounded-md border-black dark:border-white dark:bg-slate-800 dark:hover:bg-slate-700 dark:focus:bg-slate-700"
+            rows="4"
+          ></textarea>
+        </div>
+        <div class="flex flex-row items-center gap-4 text-xl">
+          <input
+            id="is_poop"
+            name="is_poop"
+            class="w-8 h-8 cursor-pointer"
+            type="checkbox"
+          />
+          <label for="is_poop" class="font-semibold">&#x1F4A9;?</label>
+        </div>
+      </div>
+      <div class="flex justify-end p-4">
+        <button
+          class="btn-secondary mr-4"
+          _="on click send navigate(path:'/frameworks') to #frameworks-router then halt"
+        >
+          CANCEL
+        </button>
+        <button class="btn-primary">SAVE</button>
+      </div>
+    </form>
+  </div>
+</div>

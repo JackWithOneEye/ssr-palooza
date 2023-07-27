@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/static/output.css" />
+  </head>
+  <body
+    id="body"
+    hx-ext="morph"
+    class="bg-white dark:bg-slate-950 dark:text-white font-sans"
+  >
+    <!--  -->
+    {% include "home.html" %}
+    <!--  -->
+    {% include "confirm-modal.html" %}
+    <!--  -->
+    <script src="/static/index.js"></script>
+    <script src="/static/extensions.js"></script>
+    <script>
+      window.$workflow = new Set();
+    </script>
+    <script type="text/hyperscript">
+      on workflowOnInit(key)
+        call $workflow.add(key)
+        then trigger workflowUpdate
+      end
+      on workflowOnDestroy(key)
+        call $workflow.delete(key)
+        then trigger workflowUpdate
+      end
+      on workflowUpdate debounced at 40ms
+        set depth to 0
+        repeat for eltId in Array.from($workflow).reverse()
+          set [@data-panel-depth] of #{eltId} to depth
+          increment depth
+        end
+      end
+    </script>
+  </body>
+</html>

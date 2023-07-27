@@ -1,0 +1,43 @@
+{% macro list_item(framework) %}
+<div
+  id="framework-list-item-{{ framework.id }}"
+  class="data-[selected=true]:bg-gray-700 transition-colors"
+  _="on click 
+      if @data-selected is really 'true' send navigate(path:'/frameworks') to #frameworks-router
+      else send navigate(path:'/frameworks/{{ framework.id }}') to #frameworks-router"
+>
+  <div
+    class="flex border-solid border-b dark:border-slate-400 cursor-pointer p-4"
+  >
+    <div class="flex flex-1 flex-col">
+      <div class="flex gap-1">
+        <div class="font-bold">{{ framework.name }}</div>
+        {% if framework.is_poop %}
+        <span>&#x1F4A9;</span>
+        {% endif %}
+      </div>
+      <div class="pt-1 text-xs text-slate-400">{{ framework.description }}</div>
+    </div>
+    <div _="on click halt the event">
+      <button
+        class="btn-primary"
+        id="framework-list-item-edit-{{ framework.id }}"
+        _="on click send navigate(path:'/frameworks/{{ framework.id }}/edit') to #frameworks-router"
+      >
+        EDIT
+      </button>
+      <button
+        class="btn-warning"
+        hx-delete="/frameworks/{{ framework.id }}"
+        hx-target="#framework-list-item-{{ framework.id }}"
+        hx-swap="outerHTML"
+        _="on htmx:confirm(issueRequest) 
+            halt the event 
+            then if openConfirmModal() is really 'confirm' call issueRequest()"
+      >
+        DELETE
+      </button>
+    </div>
+  </div>
+</div>
+{% endmacro list_item %}
