@@ -91,7 +91,7 @@
 				{/each}
 			</div>
 		</div>
-		<span slot="footer">{frameworks.length} loaded Frameworks</span>
+		<span slot="footer">{frameworks.length} loaded frameworks</span>
 	</Card>
 </WorkflowPanel>
 <slot />

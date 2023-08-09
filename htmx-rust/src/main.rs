@@ -24,7 +24,7 @@ async fn main() {
         .nest_service("/static", ServeDir::new("static"))
         .with_state(Arc::clone(&state));
 
-    axum::Server::bind(&"127.0.0.1:3000".parse().unwrap())
+    axum::Server::bind(&"127.0.0.1:3300".parse().unwrap())
         .serve(app.into_make_service())
         .await
         .unwrap();
