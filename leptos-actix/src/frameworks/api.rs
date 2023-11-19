@@ -4,7 +4,6 @@ use uuid::Uuid;
 
 #[server(CreateFramework, "/api")]
 pub async fn create_framework(
-    cx: Scope,
     name: String,
     description: String,
     is_poop: Option<String>,
@@ -14,11 +13,9 @@ pub async fn create_framework(
     use actix_web::web::Data;
     use leptos_actix::extract;
 
-    let app_state = extract(
-        cx,
-        |data: Data<AppState>, _connection: ConnectionInfo| async { data.into_inner() },
-    )
-    .await?;
+    let app_state =
+        extract(|data: Data<AppState>, _connection: ConnectionInfo| async { data.into_inner() })
+            .await?;
 
     let fw = app_state.db.write()?.create_framework(Framework {
         name,
@@ -30,22 +27,20 @@ pub async fn create_framework(
 }
 
 #[server(DeleteFramework, "/api")]
-pub async fn delete_framework(cx: Scope, id: Uuid) -> Result<Option<Framework>, ServerFnError> {
+pub async fn delete_framework(id: Uuid) -> Result<Option<Framework>, ServerFnError> {
     use crate::AppState;
     use actix_web::dev::ConnectionInfo;
     use actix_web::http::StatusCode;
     use actix_web::web::Data;
     use leptos_actix::{extract, ResponseOptions};
 
-    let app_state = extract(
-        cx,
-        |data: Data<AppState>, _connection: ConnectionInfo| async { data.into_inner() },
-    )
-    .await?;
+    let app_state =
+        extract(|data: Data<AppState>, _connection: ConnectionInfo| async { data.into_inner() })
+            .await?;
 
     let fw = app_state.db.write()?.delete_framework(id);
 
-    let response = expect_context::<ResponseOptions>(cx);
+    let response = expect_context::<ResponseOptions>();
     if fw.is_none() {
         response.set_status(StatusCode::NOT_FOUND);
     }
@@ -53,22 +48,20 @@ pub async fn delete_framework(cx: Scope, id: Uuid) -> Result<Option<Framework>, 
 }
 
 #[server(GetFramework, "/api")]
-pub async fn get_framework(cx: Scope, id: Uuid) -> Result<Option<Framework>, ServerFnError> {
+pub async fn get_framework(id: Uuid) -> Result<Option<Framework>, ServerFnError> {
     use crate::AppState;
     use actix_web::dev::ConnectionInfo;
     use actix_web::http::StatusCode;
     use actix_web::web::Data;
     use leptos_actix::{extract, ResponseOptions};
 
-    let app_state = extract(
-        cx,
-        |data: Data<AppState>, _connection: ConnectionInfo| async { data.into_inner() },
-    )
-    .await?;
+    let app_state =
+        extract(|data: Data<AppState>, _connection: ConnectionInfo| async { data.into_inner() })
+            .await?;
 
     let fw = app_state.db.read()?.get_framework(id);
 
-    let response = expect_context::<ResponseOptions>(cx);
+    let response = expect_context::<ResponseOptions>();
     if fw.is_none() {
         response.set_status(StatusCode::NOT_FOUND);
     }
@@ -76,17 +69,15 @@ pub async fn get_framework(cx: Scope, id: Uuid) -> Result<Option<Framework>, Ser
 }
 
 #[server(GetFrameworks, "/api")]
-pub async fn list_frameworks(cx: Scope) -> Result<Vec<Framework>, ServerFnError> {
+pub async fn list_frameworks() -> Result<Vec<Framework>, ServerFnError> {
     use crate::AppState;
     use actix_web::dev::ConnectionInfo;
     use actix_web::web::Data;
     use leptos_actix::extract;
 
-    let app_state = extract(
-        cx,
-        |data: Data<AppState>, _connection: ConnectionInfo| async { data.into_inner() },
-    )
-    .await?;
+    let app_state =
+        extract(|data: Data<AppState>, _connection: ConnectionInfo| async { data.into_inner() })
+            .await?;
 
     let fws = app_state.db.read()?.list_frameworks();
     Ok(fws)
@@ -94,7 +85,6 @@ pub async fn list_frameworks(cx: Scope) -> Result<Vec<Framework>, ServerFnError>
 
 #[server(UpdateFramework, "/api")]
 pub async fn update_framework(
-    cx: Scope,
     id: Uuid,
     name: String,
     description: String,
@@ -106,11 +96,9 @@ pub async fn update_framework(
     use actix_web::web::Data;
     use leptos_actix::{extract, redirect, ResponseOptions};
 
-    let app_state = extract(
-        cx,
-        |data: Data<AppState>, _connection: ConnectionInfo| async { data.into_inner() },
-    )
-    .await?;
+    let app_state =
+        extract(|data: Data<AppState>, _connection: ConnectionInfo| async { data.into_inner() })
+            .await?;
 
     let fw = app_state.db.write()?.update_framework(
         id,
@@ -122,11 +110,11 @@ pub async fn update_framework(
         },
     );
 
-    let response = expect_context::<ResponseOptions>(cx);
+    let response = expect_context::<ResponseOptions>();
     if fw.is_none() {
         response.set_status(StatusCode::NOT_FOUND);
     } else {
-        redirect(cx, &format!("/frameworks/{id}"));
+        redirect(&format!("/frameworks/{id}"));
     }
     Ok(fw)
 }

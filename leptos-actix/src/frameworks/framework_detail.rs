@@ -1,7 +1,7 @@
 use crate::components::{Card, CardBody, CardFooter, CardHeader};
 use crate::database::Framework;
 use crate::frameworks::{api, FrameworkError, FrameworksActions};
-use leptos::leptos_dom::console_log;
+use leptos::leptos_dom::logging::console_log;
 use leptos::*;
 use leptos_router::*;
 use uuid::Uuid;
@@ -12,15 +12,14 @@ struct FrameworkDetailParams {
 }
 
 #[component]
-pub fn FrameworkDetail(cx: Scope) -> impl IntoView {
+pub fn FrameworkDetail() -> impl IntoView {
     let FrameworksActions {
         patch_framework, ..
-    } = use_context::<FrameworksActions>(cx).expect("NO1!!!");
+    } = use_context::<FrameworksActions>().expect("NO1!!!");
 
-    let params = use_params::<FrameworkDetailParams>(cx);
+    let params = use_params::<FrameworkDetailParams>();
 
     let framework = create_resource(
-        cx,
         move || {
             (
                 params.with(|p| {
@@ -34,7 +33,7 @@ pub fn FrameworkDetail(cx: Scope) -> impl IntoView {
         move |(id, _)| async move {
             match id {
                 Err(e) => Err(e),
-                Ok(id) => api::get_framework(cx, id)
+                Ok(id) => api::get_framework(id)
                     .await
                     .map(|resp| resp.ok_or(FrameworkError::NotFound))
                     .map_err(|_| FrameworkError::ServerError)
@@ -43,22 +42,22 @@ pub fn FrameworkDetail(cx: Scope) -> impl IntoView {
         },
     );
 
-    let (edit, set_edit) = create_query_signal::<bool>(cx, "edit");
+    let (edit, set_edit) = create_query_signal::<bool>("edit");
 
-    view! { cx,
+    view! {
         <Transition fallback=|| ()>
-            <ErrorBoundary fallback=|cx, _| {
-                view! { cx, <Redirect path="/frameworks"/> }
+            <ErrorBoundary fallback=| _| {
+                view! {  <Redirect path="/frameworks"/> }
             }>
                 {move || {
                     framework
                         .with(
-                            cx,
+
                             |framework| {
                                 framework
                                     .clone()
                                     .map(|framework| {
-                                        view! { cx, <DetailInner framework edit set_edit/> }
+                                        view! {  <DetailInner framework=framework.unwrap() edit set_edit/> }
                                     })
                             },
                         )
@@ -72,25 +71,24 @@ pub fn FrameworkDetail(cx: Scope) -> impl IntoView {
 
 #[component]
 pub fn DetailInner(
-    cx: Scope,
     framework: Framework,
     edit: Memo<Option<bool>>,
     set_edit: SignalSetter<Option<bool>>,
 ) -> impl IntoView {
-    let framework = create_rw_signal(cx, framework);
+    let framework = create_rw_signal(framework);
 
-    view! { cx,
+    view! {
         <Card>
             <CardHeader slot:header>
                 <h5 class="panel-header">
                     {move || framework.with(|framework| framework.name.clone())}
                 </h5>
                 <div class="flex-1 flex justify-end">
-                    <Show when=move || edit.with(|e| !e.unwrap_or(false)) fallback=|_| ()>
+                    <Show when=move || edit.with(|e| !e.unwrap_or(false)) fallback=|| ()>
                         <button
                             class="btn-primary"
                             on:click=move |_| {
-                                console_log(&"CLICK");
+                                console_log("CLICK");
                                 set_edit(Some(true));
                             }
                         >
@@ -103,9 +101,9 @@ pub fn DetailInner(
             <CardBody slot:body>
                 <Show
                     when=move || edit.with(|e| !e.unwrap_or(false))
-                    fallback=move |cx| {
-                        console_log(&"???");
-                        view! { cx, <FrameworkForm framework /> }}
+                    fallback=move || {
+                        console_log("???");
+                        view! {  <FrameworkForm framework /> }}
                 >
                     <div class="flex flex-col flex-1 gap-6 px-4 overflow-auto">
                         <div class="flex flex-col justify-between gap-2">
@@ -143,12 +141,12 @@ pub fn DetailInner(
 
             </CardBody>
             <CardFooter slot:footer>
-                <Show when=move || edit.with(|e| !e.unwrap_or(false)) fallback=|_| ()>
+                <Show when=move || edit.with(|e| !e.unwrap_or(false)) fallback=|| ()>
                     <button
                         class="btn-secondary"
                         on:click=move |_| {
-                            let navigate = use_navigate(cx);
-                            let _ = navigate("/frameworks", Default::default());
+                            let navigate = use_navigate();
+                            navigate("/frameworks", Default::default());
                         }
                     >
 
@@ -162,15 +160,14 @@ pub fn DetailInner(
 
 #[component]
 fn FrameworkForm(
-    cx: Scope,
     framework: RwSignal<Framework>,
     // set_edit: SignalSetter<Option<bool>>,
 ) -> impl IntoView {
     let FrameworksActions {
         patch_framework, ..
-    } = use_context::<FrameworksActions>(cx).expect("NO2!!!");
+    } = use_context::<FrameworksActions>().expect("NO2!!!");
 
-    view! { cx,
+    view! {
         <ActionForm class="flex flex-col h-full" action=patch_framework>
             <input
                 type="hidden"
@@ -226,13 +223,13 @@ fn FrameworkForm(
 }
 
 // #[cfg(feature = "ssr")]
-// fn do_redirect(cx: Scope) {
+// fn do_redirect() {
 //     use leptos_actix::redirect;
-//     redirect(cx, "/frameworks");
+//     redirect( "/frameworks");
 // }
 
 // #[cfg(not(any(feature = "ssr", feature = "csr")))]
-// fn do_redirect(cx: Scope) {
-//     let nav = use_navigate(cx);
+// fn do_redirect() {
+//     let nav = use_navigate();
 //     let _ = nav("frameworks", Default::default());
 // }

@@ -11,7 +11,7 @@ async fn main() -> std::io::Result<()> {
     let conf = get_configuration(None).await.unwrap();
     let addr = conf.leptos_options.site_addr;
     // Generate the list of routes in your Leptos App
-    let routes = generate_route_list(|cx| view! { cx, <App/> });
+    let routes = generate_route_list(|| view! {  <App/> });
 
     let app_state = web::Data::new(AppState {
         db: Arc::new(RwLock::new(Database::default())),
@@ -34,7 +34,7 @@ async fn main() -> std::io::Result<()> {
             .leptos_routes(
                 leptos_options.to_owned(),
                 routes.to_owned(),
-                |cx| view! { cx, <App/> },
+                || view! {  <App/> },
             )
             .app_data(web::Data::new(leptos_options.to_owned()))
             .app_data(app_state.clone())
@@ -76,9 +76,9 @@ pub fn main() {
 
     console_error_panic_hook::set_once();
 
-    leptos::mount_to_body(move |cx| {
+    leptos::mount_to_body(move || {
         // note: for testing it may be preferrable to replace this with a
         // more specific component, although leptos_router should still work
-        view! { cx, <App/> }
+        view! {  <App/> }
     });
 }

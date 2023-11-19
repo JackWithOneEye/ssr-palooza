@@ -16,9 +16,9 @@ struct FrameworksActions {
 }
 
 impl FrameworksActions {
-    pub fn new(cx: Scope) -> Self {
+    pub fn new() -> Self {
         Self {
-            patch_framework: create_server_action::<UpdateFramework>(cx),
+            patch_framework: create_server_action::<UpdateFramework>(),
         }
     }
 }
@@ -34,33 +34,32 @@ pub enum FrameworkError {
 }
 
 #[component(transparent)]
-pub fn FrameworksRoutes(cx: Scope) -> impl IntoView {
-    view! { cx,
+pub fn FrameworksRoutes() -> impl IntoView {
+    view! {
         <Route path="/frameworks" view=Frameworks>
             <Route path=":id" view=framework_detail::FrameworkDetail ssr=SsrMode::Async/>
-            <Route path="" view=|cx| view! { cx, <div class="contents"></div> }/>
+            <Route path="" view=|| view! {  <div class="contents"></div> }/>
         </Route>
     }
 }
 
 #[component]
-pub fn Frameworks(cx: Scope) -> impl IntoView {
-    let actions = FrameworksActions::new(cx);
-    provide_context(cx, actions);
+pub fn Frameworks() -> impl IntoView {
+    let actions = FrameworksActions::new();
+    provide_context(actions);
 
     let frameworks_list = create_resource(
-        cx,
         move || (actions.patch_framework.version().get()),
-        move |_| async move { api::list_frameworks(cx).await.unwrap() },
+        move |_| async move { api::list_frameworks().await.unwrap() },
     );
     let render_list_items_fallback = move || {
-        view! { cx, <span>"Loading..."</span> }
+        view! {  <span>"Loading..."</span> }
     };
     let render_len_fallback = move || {
-        view! { cx, <span>"..."</span> }
+        view! {  <span>"..."</span> }
     };
 
-    view! { cx,
+    view! {
         <div class="contents">
             <Card>
                 <CardHeader slot:header>
@@ -75,14 +74,14 @@ pub fn Frameworks(cx: Scope) -> impl IntoView {
                             <Transition fallback=render_list_items_fallback>
                                 {move || {
                                     frameworks_list
-                                        .read(cx)
+                                        .get()
                                         .map(|fws| {
-                                            view! { cx,
+                                            view! {
                                                 <For
                                                     each=move || fws.to_vec()
                                                     key=|framework| framework.id
-                                                    view=move |cx, framework| {
-                                                        view! { cx, <FrameworkListItem framework/> }
+                                                    children=move |framework| {
+                                                        view! {  <FrameworkListItem framework/> }
                                                     }
                                                 />
                                             }
@@ -97,9 +96,9 @@ pub fn Frameworks(cx: Scope) -> impl IntoView {
                     <Transition fallback=render_len_fallback>
                         {move || {
                             frameworks_list
-                                .read(cx)
+                                .get()
                                 .map(|fws| {
-                                    view! { cx, <span>{fws.len()} " loaded frameworks"</span> }
+                                    view! {  <span>{fws.len()} " loaded frameworks"</span> }
                                 })
                         }}
 
@@ -112,7 +111,7 @@ pub fn Frameworks(cx: Scope) -> impl IntoView {
 }
 
 #[component]
-fn FrameworkListItem(cx: Scope, framework: Framework) -> impl IntoView {
+fn FrameworkListItem(framework: Framework) -> impl IntoView {
     let Framework {
         id,
         name,
@@ -120,28 +119,28 @@ fn FrameworkListItem(cx: Scope, framework: Framework) -> impl IntoView {
         is_poop,
     } = framework;
 
-    let location = use_location(cx);
-    let is_active = create_memo(cx, move |_| {
+    let location = use_location();
+    let is_active = create_memo(move |_| {
         let loc = location.pathname.get().to_lowercase();
         loc.contains(&id.to_string())
     });
-    let toggled_path = use_resolved_path(cx, move || {
+    let toggled_path = use_resolved_path(move || {
         if is_active() {
             "".to_string()
         } else {
             id.to_string()
         }
     });
-    let navigate = use_navigate(cx);
+    let navigate = use_navigate();
 
-    view! { cx,
+    view! {
         <div
             class="transition-colors aria-[current]:bg-gray-700"
             role="link"
             aria-current=is_active
             id=id.to_string()
             on:click=move |_| {
-                let _ = navigate(&toggled_path.get().unwrap(), Default::default());
+                navigate(&toggled_path.get().unwrap(), Default::default());
             }
         >
 
@@ -149,7 +148,7 @@ fn FrameworkListItem(cx: Scope, framework: Framework) -> impl IntoView {
                 <div class="flex flex-1 flex-col">
                     <div class="flex gap-1">
                         <div class="font-bold">{name}</div>
-                        {move || { is_poop.then(|| view! { cx, <span>{'💩'}</span> }) }}
+                        {move || { is_poop.then(|| view! {  <span>{'💩'}</span> }) }}
 
                     </div>
                     <div class="pt-1 text-xs text-slate-400">{description}</div>

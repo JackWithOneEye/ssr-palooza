@@ -4,11 +4,11 @@ use leptos_meta::*;
 use leptos_router::*;
 
 #[component]
-pub fn App(cx: Scope) -> impl IntoView {
+pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
-    provide_meta_context(cx);
+    provide_meta_context();
 
-    view! { cx,
+    view! {
         // injects a stylesheet into the document <head>
         // id=leptos means cargo-leptos will hot-reload this stylesheet
         <Stylesheet id="leptos" href="/pkg/leptos_start.css"/>
@@ -34,7 +34,7 @@ pub fn App(cx: Scope) -> impl IntoView {
                     <span>"TODO BREADCRUMBS"</span>
                     <div class="flex flex-1 gap-x-4 gap-y-4 overflow-auto p-4">
                         <Routes>
-                            <Route path="" view=|cx| view! { cx, <Redirect path="dashboard"/> }/>
+                            <Route path="" view=|| view! {  <Redirect path="dashboard"/> }/>
                             <Route path="/dashboard" view=Dashboard/>
                             <FrameworksRoutes/>
                             <Route path="/*any" view=NotFound/>
@@ -49,13 +49,13 @@ pub fn App(cx: Scope) -> impl IntoView {
 
 /// Renders the home page of your application.
 #[component]
-fn HomePage(cx: Scope) -> impl IntoView {
-    view! { cx, <h1>"HOME"</h1> }
+fn HomePage() -> impl IntoView {
+    view! {  <h1>"HOME"</h1> }
 }
 
 /// 404 - Not Found
 #[component]
-fn NotFound(cx: Scope) -> impl IntoView {
+fn NotFound() -> impl IntoView {
     // set an HTTP status code 404
     // this is feature gated because it can only be done during
     // initial server-side rendering
@@ -66,9 +66,9 @@ fn NotFound(cx: Scope) -> impl IntoView {
     {
         // this can be done inline because it's synchronous
         // if it were async, we'd use a server function
-        let resp = expect_context::<leptos_actix::ResponseOptions>(cx);
+        let resp = expect_context::<leptos_actix::ResponseOptions>();
         resp.set_status(actix_web::http::StatusCode::NOT_FOUND);
     }
 
-    view! { cx, <h1>"Not Found"</h1> }
+    view! {  <h1>"Not Found"</h1> }
 }
