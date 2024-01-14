@@ -1,5 +1,7 @@
-import database from "@/app/lib/db";
+import database from "@/lib/db";
 import { redirect, RedirectType } from "next/navigation";
+
+export const dynamic = "force-dynamic";
 
 export default async function FrameworkLayout({
   children,
@@ -8,9 +10,14 @@ export default async function FrameworkLayout({
   children: React.ReactNode;
   params: { id: number };
 }) {
-  const framework = await database.getFramework(id);
+  let framework;
+  try {
+    framework = await database.getFramework(id);
+  } catch (e) {
+    console.error(e);
+  }
   if (!framework) {
     redirect("/frameworks", RedirectType.replace);
   }
-  return children;
+  return <>{children}</>;
 }

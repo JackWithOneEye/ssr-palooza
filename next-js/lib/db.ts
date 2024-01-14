@@ -3,6 +3,7 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { boolean, pgTable, serial, text } from "drizzle-orm/pg-core";
 import { eq } from "drizzle-orm";
+import { delay } from "./delay";
 
 const frameworks = pgTable('frameworks', {
     id: serial('id').primaryKey().notNull(),
@@ -22,7 +23,8 @@ class Database {
     }
 
     async createFramework(framework: typeof frameworks.$inferInsert) {
-        return this.db.insert(frameworks).values(framework).returning();
+        const returning = await this.db.insert(frameworks).values(framework).returning();
+        return returning[0];
     }
 
     async deleteFramework(id: number) {
@@ -35,7 +37,7 @@ class Database {
 
     async getFramework(id: number) {
         const found = await this.db.select().from(frameworks).where(eq(frameworks.id, id));
-        return found[0];
+        return found[0] as Framework | undefined;
     }
 
     async updateFramework(id: number, framework: typeof frameworks.$inferInsert) {
@@ -43,6 +45,12 @@ class Database {
     }
 }
 
-const database = new Database();
+// @ts-expect-error
+const database: Database = globalThis.database ?? new Database();
 
 export default database;
+
+if (process.env.NODE_ENV !== "production") {
+    // @ts-expect-error
+    globalThis.database = database;
+}

@@ -1,5 +1,5 @@
 import { FormHTMLAttributes } from "react";
-import { Framework } from "./db";
+import { type Framework } from "../db";
 
 type FrameworkFormProps = {
   action: NonNullable<FormHTMLAttributes<HTMLFormElement>["action"]>;
@@ -7,7 +7,7 @@ type FrameworkFormProps = {
   framework?: Omit<Framework, "id">;
 };
 
-export default function FrameworkForm({
+export default async function FrameworkForm({
   action,
   framework = { name: "", description: "", isPoop: false },
   footerActions,

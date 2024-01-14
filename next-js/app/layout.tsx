@@ -3,9 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { useState } from "react";
 import Link from "next/link";
-import Breadcrumbs from "./lib/components/breadcrumbs";
+import Breadcrumbs from "../lib/components/breadcrumbs";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "LISTS!",

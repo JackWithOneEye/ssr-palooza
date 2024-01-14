@@ -1,3 +1,3 @@
-export default function Frameworks() {
+export default function FrameworksPage() {
   return null;
 }
