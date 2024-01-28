@@ -5,7 +5,7 @@ import { notFound, redirect, RedirectType } from "next/navigation";
 export async function getFramework(id: number) {
     let framework;
     try {
-        framework = await delay(database.getFramework(id), 1000);
+        framework = await delay(database.getFramework(id), 0);
     } catch (e) {
         console.error(e);
     }

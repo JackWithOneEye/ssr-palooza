@@ -3,14 +3,17 @@ import { type Framework } from "../db";
 type FrameworkFormProps = {
   footerActions: React.ReactNode;
   framework?: Omit<Framework, "id">;
+  id?: number;
 };
 
 export default async function FrameworkForm({
-  framework = { name: "", description: "", isPoop: false },
   footerActions,
+  framework = { name: "", description: "", isPoop: false },
+  id,
 }: FrameworkFormProps) {
   return (
     <form className="flex flex-col h-full">
+      {typeof id === "number" && <input name="id" hidden defaultValue={id} />}
       <div className="flex flex-col flex-1 gap-6 px-4 overflow-auto">
         <div className="flex flex-col justify-between gap-2">
           <label htmlFor="name" className="font-semibold">
@@ -44,7 +47,7 @@ export default async function FrameworkForm({
             type="checkbox"
             defaultChecked={framework.isPoop}
           />
-          <label htmlFor="is_poop" className="font-semibold">
+          <label htmlFor="isPoop" className="font-semibold">
             &#x1F4A9;?
           </label>
         </div>

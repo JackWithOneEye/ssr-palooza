@@ -51,9 +51,7 @@ export function useWorkflowEntry(entry: WorkflowEntry) {
     return () => pop();
   }, [push, pop]);
 
-  return (
-    workflow.length -
-    workflow.findIndex(({ path }) => path === ref.current.path) -
-    1
-  );
+  return [...workflow]
+    .reverse()
+    .findIndex(({ path }) => path === ref.current.path);
 }

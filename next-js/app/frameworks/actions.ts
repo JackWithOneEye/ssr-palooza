@@ -1,31 +1,53 @@
 "use server";
 
-import database from "@/lib/db";
+import database, { FrameworksQueryParams } from "@/lib/db";
+import { delay } from "@/lib/delay";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
-export async function createFramework(formData: FormData) {
-    const result = await database.createFramework({
-        name: formData.get("name")?.toString() ?? "",
-        description: formData.get("description")?.toString() ?? "",
-        isPoop: !!formData.get("isPoop"),
-    });
-    revalidatePath("/frameworks");
-    redirect(`/frameworks/${result.id}`);
+export async function getFrameworks(params: FrameworksQueryParams) {
+    const result = await delay(database.getFrameworks(params), 0);
+    return result;
 }
 
-export async function deleteFramework(id: number) {
-    await database.deleteFramework(id);
+export async function createFramework(_prev: { message: string, id?: number }, formData: FormData) {
+    let id: number;
+    try {
+        const framework = await database.createFramework({
+            name: formData.get("name")?.toString() ?? "",
+            description: formData.get("description")?.toString() ?? "",
+            isPoop: !!formData.get("isPoop"),
+        });
+        id = framework.id;
+    } catch (e) {
+        console.warn(e)
+        return { message: 'error' }
+    }
     revalidatePath("/frameworks");
-    redirect(`/frameworks`);
+    return { message: 'done', id };
 }
 
-export async function updateFramework(id: number, formData: FormData) {
-    await database.updateFramework(id, {
-        name: formData.get("name")?.toString() ?? "",
-        description: formData.get("description")?.toString() ?? "",
-        isPoop: !!formData.get("isPoop"),
-    });
+export async function deleteFramework(_prev: { message: string }, formData: FormData) {
+    try {
+        const id = parseInt(formData.get("id")!.toString(), 10)
+        await database.deleteFramework(id);
+    } catch (e) {
+        return { message: 'error' }
+    }
     revalidatePath("/frameworks");
-    redirect(`/frameworks/${id}`);
+    return { message: 'done' };
+}
+
+export async function updateFramework(_prev: { message: string }, formData: FormData) {
+    try {
+        const id = parseInt(formData.get("id")!.toString(), 10)
+        await database.updateFramework(id, {
+            name: formData.get("name")?.toString() ?? "",
+            description: formData.get("description")?.toString() ?? "",
+            isPoop: !!formData.get("isPoop"),
+        });
+    } catch (e) {
+        return { message: 'error' };
+    }
+    revalidatePath("/frameworks");
+    return { message: "done" };
 }
