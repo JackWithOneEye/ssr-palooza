@@ -1,7 +1,7 @@
 "use server";
 
 import database from "@/lib/db";
-// import { revalidatePath } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function createFramework(formData: FormData) {
@@ -10,13 +10,13 @@ export async function createFramework(formData: FormData) {
         description: formData.get("description")?.toString() ?? "",
         isPoop: !!formData.get("isPoop"),
     });
-    // revalidatePath("/frameworks");
-    redirect(`/frameworks/${result.id}/detail`);
+    revalidatePath("/frameworks");
+    redirect(`/frameworks/${result.id}`);
 }
 
 export async function deleteFramework(id: number) {
     await database.deleteFramework(id);
-    // revalidatePath("/frameworks");
+    revalidatePath("/frameworks");
     redirect(`/frameworks`);
 }
 
@@ -26,6 +26,6 @@ export async function updateFramework(id: number, formData: FormData) {
         description: formData.get("description")?.toString() ?? "",
         isPoop: !!formData.get("isPoop"),
     });
-    // revalidatePath("/frameworks");
-    redirect(`/frameworks/${id}/detail`);
+    revalidatePath("/frameworks");
+    redirect(`/frameworks/${id}`);
 }

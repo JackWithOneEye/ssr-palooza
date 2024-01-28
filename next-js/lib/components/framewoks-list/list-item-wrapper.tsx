@@ -13,7 +13,7 @@ export default function FrameworkListItemWrapper({
   const params = useParams();
   const isSelected = params.id === `${frameworkId}`;
   return (
-    <Link href={isSelected ? "/frameworks" : `/frameworks/${frameworkId}/detail`}>
+    <Link href={isSelected ? "/frameworks" : `/frameworks/${frameworkId}`}>
       <div
         className={"transition-colors" + (isSelected ? " bg-gray-700" : "")}
       >

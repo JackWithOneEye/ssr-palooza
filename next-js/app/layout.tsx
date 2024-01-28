@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-import { useState } from "react";
 import Link from "next/link";
-import Breadcrumbs from "../lib/components/breadcrumbs";
+import Breadcrumbs from "../lib/workflow/breadcrumbs";
+import WorkflowProvider from "@/lib/workflow/workflow-provider";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -34,10 +33,12 @@ export default function RootLayout({
               </Link>
             </div>
           </nav>
-          <Breadcrumbs />
-          <div className="flex flex-1 gap-x-4 gap-y-4 overflow-auto p-4">
-            {children}
-          </div>
+          <WorkflowProvider>
+            <Breadcrumbs />
+            <div className="flex flex-1 gap-x-4 gap-y-4 overflow-auto p-4">
+              {children}
+            </div>
+          </WorkflowProvider>
         </div>
       </body>
     </html>

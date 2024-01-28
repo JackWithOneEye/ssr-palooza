@@ -1,15 +1,13 @@
 import Link from "next/link";
-import FramewoksList from "./_framewoks-list/frameworks-list";
+import FramewoksList from "../../lib/components/framewoks-list/frameworks-list";
 import Card from "@/lib/components/ui/card";
 import PanelHeader from "@/lib/components/ui/panel-header";
 import PrimaryButton from "@/lib/components/ui/primary-button";
 import database from "@/lib/db";
-import WorkflowPanel from "@/lib/components/workflow-panel";
+import WorkflowPanel from "@/lib/workflow/workflow-panel";
 import { Suspense } from "react";
 import Defer from "@/lib/components/ui/defer";
 import { delay } from "@/lib/delay";
-
-export const dynamic = "force-dynamic";
 
 const header = (
   <>
@@ -23,7 +21,7 @@ const header = (
 );
 
 async function Frameworks() {
-  const frameworks = await database.getFrameworks();
+  const frameworks = await delay(database.getFrameworks(), 1000);
   return (
     <Card
       header={header}
@@ -41,7 +39,7 @@ export default async function FrameworksLayout({
 }) {
   return (
     <>
-      <WorkflowPanel>
+      <WorkflowPanel label="Frameworks" path="/frameworks">
         <Suspense
           fallback={
             <Card header={header}>

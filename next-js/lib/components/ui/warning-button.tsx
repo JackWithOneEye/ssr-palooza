@@ -1,8 +1,7 @@
-import React, { DOMAttributes } from "react";
+import React, { ButtonHTMLAttributes } from "react";
 
-type WarningButtonProps = DOMAttributes<HTMLButtonElement> & {
+type WarningButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode;
-  className?: string;
 };
 
 export default function WarningButton({

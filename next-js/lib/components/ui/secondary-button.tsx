@@ -1,6 +1,6 @@
-import React, { DOMAttributes } from "react";
+import React, { ButtonHTMLAttributes } from "react";
 
-type SecondaryButtonProps = DOMAttributes<HTMLButtonElement> & {
+type SecondaryButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode;
 };
 

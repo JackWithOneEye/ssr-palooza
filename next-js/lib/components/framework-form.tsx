@@ -1,19 +1,16 @@
-import { FormHTMLAttributes } from "react";
 import { type Framework } from "../db";
 
 type FrameworkFormProps = {
-  action: NonNullable<FormHTMLAttributes<HTMLFormElement>["action"]>;
   footerActions: React.ReactNode;
   framework?: Omit<Framework, "id">;
 };
 
 export default async function FrameworkForm({
-  action,
   framework = { name: "", description: "", isPoop: false },
   footerActions,
 }: FrameworkFormProps) {
   return (
-    <form className="flex flex-col h-full" action={action}>
+    <form className="flex flex-col h-full">
       <div className="flex flex-col flex-1 gap-6 px-4 overflow-auto">
         <div className="flex flex-col justify-between gap-2">
           <label htmlFor="name" className="font-semibold">
