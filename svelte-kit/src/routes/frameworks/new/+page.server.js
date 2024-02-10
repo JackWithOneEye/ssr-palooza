@@ -1,4 +1,5 @@
-import { error, redirect } from '@sveltejs/kit';
+import database from '$lib/server/db';
+import { redirect } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load() {
@@ -6,14 +7,13 @@ export async function load() {
 };
 
 export const actions = {
-    create: async ({ fetch, request }) => {
+    create: async ({ request }) => {
         const body = await request.formData();
-        const res = await fetch(`/api/frameworks/new`, { method: 'POST', body });
-        if (!res.ok)  {
-            throw error(res.status);
-        }
-        /** @type {import('$lib/db').Framework} */
-        const fw = await res.json();
-        throw redirect(303, `/frameworks/${fw.id}`)
+        const framework = await database.createFramework({
+            name: body.get('name')?.toString() ?? '',
+            description: body.get('description')?.toString() ?? '',
+            isPoop: !!body.get('isPoop')
+        });
+        redirect(303, `/frameworks/${framework.id}`);
     }
 };

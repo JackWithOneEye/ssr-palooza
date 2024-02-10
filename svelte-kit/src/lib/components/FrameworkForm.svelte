@@ -1,10 +1,7 @@
 <script>
 	import { enhance } from '$app/forms';
 
-	/** @type {string} */
-	export let action;
-
-	/** @type {Omit<import('$lib/db').Framework, 'id'>} */
+	/** @type {Omit<import('$lib/server/db').Framework, 'id'>} */
 	export let framework = {
 		name: '',
 		description: '',
@@ -12,12 +9,12 @@
 	};
 </script>
 
-<form class="flex flex-col h-full" method="POST" {action} use:enhance>
+<form class="flex flex-col h-full" method="POST" use:enhance>
 	<div class="flex flex-col flex-1 gap-6 px-4 overflow-auto">
 		<div class="flex flex-col justify-between gap-2">
 			<label for="name" class="font-semibold">Name</label>
 			<input
-				class="p-1 outline-none border-solid border rounded-md border-black dark:border-white dark:bg-slate-800 dark:hover:bg-slate-700 dark:focus:bg-slate-700"
+				class="p-1 outline-none border-solid border rounded-md border-white bg-slate-800 hover:bg-slate-700 focus:bg-slate-700"
 				name="name"
 				type="text"
 				autocomplete="off"
@@ -29,7 +26,7 @@
 			<label for="description" class="font-semibold">Description</label>
 			<textarea
 				name="description"
-				class="resize-none p-1 outline-none border-solid border rounded-md border-black dark:border-white dark:bg-slate-800 dark:hover:bg-slate-700 dark:focus:bg-slate-700"
+				class="resize-none p-1 outline-none border-solid border rounded-md border-white bg-slate-800 hover:bg-slate-700 focus:bg-slate-700"
 				required
 				rows="4"
 				value={framework.description}

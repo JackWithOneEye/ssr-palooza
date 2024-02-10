@@ -8,12 +8,12 @@
 <WorkflowPanel routeId="/frameworks/new">
 	<Card>
 		<h5 class="panel-header" slot="header">New Framework</h5>
-		<FrameworkForm action="?/create" slot="body">
+		<FrameworkForm slot="body">
 			<svelte:fragment slot="footer-actions">
 				<button class="btn-secondary mr-4" on:click|preventDefault={() => goto('/frameworks')}
 					>CANCEL</button
 				>
-				<button class="btn-primary">SAVE</button>
+				<button class="btn-primary" formaction="?/create">SAVE</button>
 			</svelte:fragment>
 		</FrameworkForm>
 	</Card>

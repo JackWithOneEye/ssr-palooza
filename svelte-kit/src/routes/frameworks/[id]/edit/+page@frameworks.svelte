@@ -17,7 +17,7 @@
 <WorkflowPanel routeId="/frameworks/[id]/edit">
 	<Card>
 		<h5 class="panel-header" slot="header">{framework.name}</h5>
-		<FrameworkForm action="?/update" {framework} slot="body">
+		<FrameworkForm {framework} slot="body">
 			<svelte:fragment slot="footer-actions">
 				<form
 					class="flex-1"
@@ -32,7 +32,7 @@
 					class="btn-secondary mr-4"
 					on:click|preventDefault={() => goto(`/frameworks/${framework.id}`)}>CANCEL</button
 				>
-				<button class="btn-primary">SAVE</button>
+				<button class="btn-primary" formaction="?/update">SAVE</button>
 			</svelte:fragment>
 		</FrameworkForm>
 	</Card>

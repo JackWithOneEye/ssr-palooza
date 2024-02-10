@@ -19,19 +19,19 @@
 
 {#if opened}
 	<div
-		class="bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0"
+		class="bg-zinc-900 bg-opacity-80 fixed inset-0"
 		on:click={close}
 		role="none"
 		transition:fade={{ duration: 300 }}
 	/>
 	<div
-		class="fixed flex flex-col inset-0 w-64 h-screen p-4 overflow-y-auto bg-white dark:bg-gray-800"
+		class="fixed flex flex-col inset-0 w-64 h-screen p-4 overflow-y-auto bg-zinc-800"
 		tabindex="-1"
 		transition:fly={{ x: -300, opacity: 1, duration: 400 }}
 	>
 		<div class="flex items-center pt-2 pb-4 pl-1">
 			<button
-				class="flex items-center justify-center p-2 mr-4 h-8 w-8 hover:bg-gray-700"
+				class="flex items-center justify-center p-2 mr-4 h-8 w-8 hover:bg-zinc-700"
 				on:click|stopPropagation={close}
 			>
 				<span class="font-mono">x</span>
@@ -54,7 +54,7 @@
 
 <style lang="postcss">
 	.menu-item {
-		@apply border-l-4 border-transparent hover:dark:bg-gray-700;
+		@apply border-l-4 border-transparent hover:bg-zinc-700;
 	}
 	.menu-item.active {
 		@apply border-sky-500;

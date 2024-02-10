@@ -9,11 +9,12 @@
 	import Modal from '$lib/components/ui/Modal.svelte';
 	import WorkflowPanel from '$lib/components/WorkflowPanel.svelte';
 	import Menu from '$lib/components/ui/Menu.svelte';
+	import PanelHeader from '$lib/components/PanelHeader.svelte';
 
 	export let data;
 
 	$: frameworks = data.frameworks;
-	$: selectedFrameworkId = $page.params.id;
+	$: selectedFrameworkId = parseInt($page.params.id);
 
 	/** @type {() => Promise<string>} */
 	let openDeleteModal;
@@ -28,7 +29,7 @@
 
 	setContext('confirmDeleteFramework', confirmDeleteFramework);
 
-	/** @param id {string} */
+	/** @param {number} id */
 	function toggleDetails(id) {
 		if (selectedFrameworkId === id) {
 			goto('/frameworks');
@@ -41,7 +42,7 @@
 <WorkflowPanel routeId="/frameworks">
 	<Card>
 		<svelte:fragment slot="header">
-			<h5 class="panel-header">Frameworks</h5>
+			<PanelHeader>Frameworks</PanelHeader>
 			<div class="flex-1 flex justify-end">
 				<button class="btn-primary" on:click={() => goto('/frameworks/new')}>ADD</button>
 			</div>
@@ -51,7 +52,7 @@
 				{#each frameworks as { id, name, description, isPoop } (id)}
 					<div
 						class="transition-colors"
-						class:bg-gray-700={selectedFrameworkId === id}
+						class:bg-slate-700={selectedFrameworkId === id}
 						tabindex="0"
 						role="link"
 						on:click={() => toggleDetails(id)}

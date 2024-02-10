@@ -1,3 +1,4 @@
+import database from '$lib/server/db';
 import { error, redirect } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageServerLoad} */
@@ -6,13 +7,13 @@ export async function load() {
 };
 
 export const actions = {
-    delete: async ({ fetch, request }) => {
+    delete: async ({ request }) => {
         const formData = await request.formData();
-        const id = formData.get('id');
-        const res = await fetch(`/api/frameworks/${id}`, { method: 'DELETE' });
-        if (!res.ok) {
-            throw error(res.status);
+        const id = formData.get('id')?.toString();
+        if (!id) {
+            error(400);
         }
-        throw redirect(303, `/frameworks`)
+        await database.deleteFramework(parseInt(id, 10));
+        redirect(303, `/frameworks`);
     },
 };

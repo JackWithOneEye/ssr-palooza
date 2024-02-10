@@ -1,8 +1,7 @@
-/** @type {import('./$types').LayoutServerLoad} */
-export async function load(event) {
-    const res = await event.fetch('/api/frameworks');
+import database from '$lib/server/db';
 
-    /** @type {import('$lib/db').Framework[]} */
-    const frameworks = await res.json();
+/** @type {import('./$types').LayoutServerLoad} */
+export async function load() {
+    const frameworks = await database.getFrameworks({});
     return { frameworks };
 };

@@ -1,6 +1,8 @@
 <script></script>
 
-<div class="card max-w-screen-md flex-1 flex flex-col">
+<div
+	class=" w-full border rounded-lg shadow bg-zinc-800 border-zinc-700 max-w-screen-md flex-1 flex flex-col"
+>
 	{#if $$slots.header}
 		<header class="flex items-center gap-4 p-4">
 			<slot name="header" />

@@ -12,9 +12,9 @@
 </script>
 
 <div class="h-screen flex flex-col">
-	<nav class="flex items-center px-1 py-2 dark:bg-gray-900">
+	<nav class="flex items-center px-1 py-2 bg-zinc-800">
 		<div class="basis-1/3">
-			<button class=" ounded-sm px-2 py-2 hover:bg-gray-800" on:click|stopPropagation={openMenu}
+			<button class=" ounded-sm px-2 py-2 hover:bg-zinc-700" on:click|stopPropagation={openMenu}
 				>MENU</button
 			>
 		</div>
