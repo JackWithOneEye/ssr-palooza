@@ -1,8 +1,16 @@
 <script>
 	import { fade, fly } from 'svelte/transition';
 
-	/** @type {import('$lib/active-route').ActiveRoute[]}*/
-	export let activeRoutes;
+	/**
+	 * @typedef {Object} Props
+	 * @property {import('$lib/active-route').ActiveRoute[]} activeRoutes
+	 */
+
+	/** @type {Props} */
+	let { activeRoutes } = $props();
+
+	let opened = $state(false);
+	let lvl1RouteId = $derived(activeRoutes[1]?.routeId);
 
 	export function close() {
 		opened = false;
@@ -11,19 +19,15 @@
 	export function open() {
 		opened = true;
 	}
-
-	$: lvl1RouteId = activeRoutes[1]?.routeId;
-
-	let opened = false;
 </script>
 
 {#if opened}
 	<div
 		class="bg-zinc-900 bg-opacity-80 fixed inset-0"
-		on:click={close}
+		onclick={close}
 		role="none"
 		transition:fade={{ duration: 300 }}
-	/>
+	></div>
 	<div
 		class="fixed flex flex-col inset-0 w-64 h-screen p-4 overflow-y-auto bg-zinc-800"
 		tabindex="-1"
@@ -32,7 +36,10 @@
 		<div class="flex items-center pt-2 pb-4 pl-1">
 			<button
 				class="flex items-center justify-center p-2 mr-4 h-8 w-8 hover:bg-zinc-700"
-				on:click|stopPropagation={close}
+				onclick={(e) => {
+					e.stopPropagation();
+					close();
+				}}
 			>
 				<span class="font-mono">x</span>
 			</button>
@@ -40,7 +47,7 @@
 		</div>
 		<ul class="list-none list-inside flex-1">
 			<li class="menu-item" class:active={lvl1RouteId === '/frameworks'}>
-				<a href="/frameworks" on:click={close}>Frameworks</a>
+				<a href="/frameworks" onclick={close}>Frameworks</a>
 			</li>
 			<li class="menu-item">
 				<span>Movies</span>

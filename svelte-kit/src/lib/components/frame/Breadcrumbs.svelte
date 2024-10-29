@@ -1,6 +1,12 @@
 <script>
-	/** @type {import('$lib/active-route').ActiveRoute[]}*/
-	export let activeRoutes;
+	
+	/**
+	 * @typedef {Object} Props
+	 * @property {import('$lib/active-route').ActiveRoute[]} activeRoutes
+	 */
+
+	/** @type {Props} */
+	let { activeRoutes } = $props();
 </script>
 
 <div class="flex-none flex gap-4 p-4 overflow-auto">

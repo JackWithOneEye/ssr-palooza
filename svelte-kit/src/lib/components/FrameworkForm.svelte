@@ -1,12 +1,21 @@
 <script>
 	import { enhance } from '$app/forms';
 
-	/** @type {Omit<import('$lib/server/db').Framework, 'id'>} */
-	export let framework = {
-		name: '',
-		description: '',
-		isPoop: false
-	};
+	/**
+	 * @typedef {Object} Props
+	 * @property {Omit<import('$lib/server/db').Framework, 'id'>} [framework]
+	 * @property {import('svelte').Snippet} footerActions
+	 */
+
+	/** @type {Props} */
+	let {
+		framework = {
+			name: '',
+			description: '',
+			isPoop: false
+		},
+		footerActions
+	} = $props();
 </script>
 
 <form class="flex flex-col h-full" method="POST" use:enhance>
@@ -30,7 +39,7 @@
 				required
 				rows="4"
 				value={framework.description}
-			/>
+			></textarea>
 		</div>
 		<div class="flex flex-row items-center gap-4 text-xl">
 			<input
@@ -43,6 +52,6 @@
 		</div>
 	</div>
 	<div class="flex justify-end p-4">
-		<slot name="footer-actions" />
+		{@render footerActions()}
 	</div>
 </form>

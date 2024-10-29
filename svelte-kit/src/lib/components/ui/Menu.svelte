@@ -1,4 +1,4 @@
-<script context="module">
+<script module>
 	/** @type {Set<() => void>}*/
 	const closeFns = new Set();
 
@@ -15,9 +15,17 @@
 <script>
 	import { onMount } from 'svelte';
 
-	let open = false;
-	/** @type {HTMLButtonElement}*/
-	let button;
+	/**
+	 * @typedef {Object} Props
+	 * @property {import('svelte').Snippet} [children]
+	 */
+
+	/** @type {Props} */
+	let { children } = $props();
+
+	let open = $state(false);
+	/** @type {HTMLButtonElement | undefined}*/
+	let button = $state();
 	const close = () => (open = false);
 
 	function toggle() {
@@ -33,15 +41,20 @@
 	});
 </script>
 
-<svelte:body on:click={close} />
+<svelte:body onclick={close} />
 
 <div class="relative block">
 	<button
 		class="h-full px-2 text-center font-mono text-xs hover:bg-gray-800"
 		bind:this={button}
-		on:click|self|stopPropagation={toggle}>...</button
+		onclick={(e) => {
+			if (e.target === button) {
+				e.stopPropagation();
+				toggle();
+			}
+		}}>...</button
 	>
 	<div class="absolute z-50 bg-slate-950" class:hidden={!open} role="menu" tabindex="-1">
-		<slot />
+		{@render children?.()}
 	</div>
 </div>
